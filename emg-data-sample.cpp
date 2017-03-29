@@ -47,11 +47,10 @@ public:
 
         // Print out the EMG data.
         for (size_t i = 0; i < emgSamples.size(); i++) {
-            std::ostringstream oss;
-            oss << static_cast<int>(emgSamples[i]);
-            std::string emgString = oss.str();
+            float emg=(float)(static_cast<int>(emgSamples[i]));
+            std::string emgString = std::to_string(emg);
 
-            std::cout << '[' << emgString << std::string(4 - emgString.size(), ' ') << ']';
+            std::cout << '[' << emgString << ']';
         }
 
         std::cout << std::flush;
@@ -60,16 +59,16 @@ public:
     //A function to write the current recorded EMG data into a csv file
     void writeToCSV(std::ofstream* out, char* time){
         *out << time<<",";
-        int emg;
+        float emg;
 
         for (size_t i = 0; i < 7; i++) {
             
-            emg=static_cast<int>(emgSamples[i]);
+            emg=(float)(static_cast<int>(emgSamples[i]));
             std::string emgString = std::to_string(emg);
 
             *out << emgString<<",";
         }
-        emg= static_cast<int>(emgSamples[7]);
+        emg= (float)(static_cast<int>(emgSamples[7]));
         std::string emgString = std::to_string(emg);
         *out << emgString;
         *out<<std::endl;
@@ -123,8 +122,8 @@ int main(int argc, char** argv)
     std::cin >> overwrite;
 
     //file base address
-    std::string base="/Users/Shawn/Documents/EMG_Research/Data/";
-    std::string filename="Positive_dataset.csv";
+    std::string base="/Users/Shawn/Documents/EMG_Research/EMG/Data/";
+    std::string filename="Negative_dataset_simpleMoves.csv";
 
     //final path to store the file
     std::string path=base+filename;
@@ -137,7 +136,6 @@ int main(int argc, char** argv)
     //do not overwirte, append the result at the end of the file
     else{
         outfile.open(path,std::ofstream::out | std::ofstream::app);
-        outfile<<"\r";
         
     }
     
