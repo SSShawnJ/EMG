@@ -6,7 +6,6 @@ Datasets are ploted using python's matplotlib libaray.
  - y axis is the values for myo's emg output(8 channels)
  
  Different channel's values are ploted using different colors.
- 
  Here is the channel-color table.
   - channel 1: red
   - channel 2: blue 
