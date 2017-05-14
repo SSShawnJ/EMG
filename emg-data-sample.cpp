@@ -15,6 +15,9 @@
 
 class DataCollector : public myo::DeviceListener {
 public:
+    float accelSamples[3];
+    float gyroSamples[3];
+    
     DataCollector()
     : emgSamples()
     {
@@ -35,6 +38,26 @@ public:
             emgSamples[i] = emg[i];
         }
     }
+    
+    void onAccelerometerData(myo::Myo* myo, uint64_t timestamp, const myo::Vector3<float>& accel)
+    {
+        accelSamples[0]=accel.x();
+        accelSamples[1]=accel.y();
+        accelSamples[2]=accel.z();
+        
+    }
+    
+    
+    void onGyroscopeData(myo::Myo* myo, uint64_t timestamp, const myo::Vector3<float>& gyro)
+    {
+        gyroSamples[0]=gyro.x();
+        gyroSamples[1]=gyro.y();
+        gyroSamples[2]=gyro.z();
+        
+    }
+
+    
+    
 
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
     // For this example, the functions overridden above are sufficient.
@@ -52,6 +75,17 @@ public:
 
             std::cout << '[' << emgString << ']';
         }
+        
+        for(int i=0;i<3;i++){
+            float gyro=gyroSamples[i];
+            std::string gyroString = std::to_string(gyro);
+            std::cout << '[' << gyroString << ']';
+        }
+        for(int i=0;i<3;i++){
+            float accel=accelSamples[i];
+            std::string accelString = std::to_string(accel);
+            std::cout << '[' << accelString << ']';
+        }
 
         std::cout << std::flush;
     }
@@ -61,16 +95,26 @@ public:
         *out << time<<",";
         float emg;
 
-        for (size_t i = 0; i < 7; i++) {
+        for (size_t i = 0; i < 8; i++) {
             
             emg=(float)(static_cast<int>(emgSamples[i]));
             std::string emgString = std::to_string(emg);
 
             *out << emgString<<",";
         }
-        emg= (float)(static_cast<int>(emgSamples[7]));
-        std::string emgString = std::to_string(emg);
-        *out << emgString;
+        
+        for(int i=0;i<3;i++){
+            std::string gyroString = std::to_string(gyroSamples[i]);
+             *out << gyroString<<",";
+        }
+        
+        for(int i=0;i<2;i++){
+            std::string accelString = std::to_string(accelSamples[i]);
+            *out << accelString<<",";
+        }
+        std::string accelString = std::to_string(accelSamples[2]);
+        *out << accelString;
+
         *out<<std::endl;
 
     }
@@ -123,7 +167,7 @@ int main(int argc, char** argv)
 
     //file base address
     std::string base="/Users/Shawn/Documents/EMG_Research/EMG/Data/";
-    std::string filename="Negative_dataset_simpleMoves.csv";
+    std::string filename="Negative_dataset_grabbing.csv";
 
     //final path to store the file
     std::string path=base+filename;
@@ -131,31 +175,38 @@ int main(int argc, char** argv)
     //overwrite the file 
     if(overwrite.compare("y")==0){
         outfile.open(path);
-        outfile<<"Time Stamp,C0,C1,C2,C3,C4,C5,C6,C7"<<std::endl;
+        outfile<<"Time Stamp,C0,C1,C2,C3,C4,C5,C6,C7,Gx,Gy,Gz,Ax,Ay,Az"<<std::endl;
     }
     //do not overwirte, append the result at the end of the file
     else{
         outfile.open(path,std::ofstream::out | std::ofstream::app);
         
     }
-    
+    int print =0;
 
     // Finally we enter our main loop.
     while (1) {
+        
+        
         // In each iteration of our main loop, we run the Myo event loop for a set number of milliseconds.
-        // In this case, we wish to update our display 20 times a second, so we run for 1000/20 milliseconds.
-        hub.run(1000/20);
+        // In this case, we wish to update our display 15 times a second, so we run for 1000/20 milliseconds.
+        hub.run(1000/200);
         // After processing events, we call the print() member function we defined above to print out the values we've
         // obtained from any events that have occurred.
 
 
         time_t now = time(0);
         // convert now to string form
+        
         char* dt = ctime(&now);
         dt[24]='\0';
 
         collector.writeToCSV(&outfile, dt);
-        collector.print();
+        
+        if(print<20)
+           collector.print();
+        
+        print++;
     }
 
 

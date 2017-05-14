@@ -1,11 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-#subplot
-
-f=open("Data/Negative_dataset_grabbing.csv","r")
-f.readline()
-
 #plot the data
 #  - x axis is the sequence number the emg event happened
 #  - y axis is the value of 8 channels output
@@ -20,6 +12,16 @@ f.readline()
 #  channel 6: yellow
 #  channel 7: black
 #  channel 8: red
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+#subplot
+
+f=open("Data/Negative_dataset_drinking.csv","r")
+f.readline()
+
+
 #
 # for j in range(1,100):
 # 	array=f.readline().split(",")
@@ -60,7 +62,7 @@ t=np.arange(0,len(c0),1)
 
 
 fig = plt.figure()
-fig.suptitle('Negative_dataset_grabbing', fontsize=16)
+fig.suptitle('negative_drinking', fontsize=16)
 
 # plt.axis([0, 1800, 150, -150])
 # plt.title("Negative data(simple movements)")
@@ -129,7 +131,7 @@ fig.set_size_inches((default_size[0], default_size[1]*3))
 
 # fig.subplots_adjust(hspace=0.8,wspace=1)
 
-fig.savefig("Plots/negative_grabbing.png")
+fig.savefig("Plots/negative_drinking.png")
 plt.show()
 plt.close()
 
