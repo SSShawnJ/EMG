@@ -1,5 +1,5 @@
 f=open("Negative_dataset_grabbing.csv","r")
-fw=open("Negative_dataset_grabbingF.csv","w")
+fw=open("Negative_dataset_grabbing.csv","w")
 
 
 fw.write(f.readline())
