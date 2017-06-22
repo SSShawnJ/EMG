@@ -9,8 +9,8 @@ from sklearn import svm
 from sklearn.metrics import accuracy_score
 
 
-def train(X_train,y_train,X_test,y_test,c=1000,k='rbf'):
-	clf = svm.SVC(kernel=k,C=c)
+def train(X_train,y_train,X_test,y_test,c=1,k='linear'):
+	clf = svm.LinearSVC(C=c)
 	clf.fit(X_train,y_train)
 	pred=clf.predict(X_test)
 	return accuracy_score(y_test,pred)
@@ -32,9 +32,9 @@ if __name__ == '__main__':
 	y1+=y2
 
 
-	X_train, X_test, y_train, y_test = train_test_split(feature1, y1, test_size=0.2, random_state=0)
+	X_train, X_test, y_train, y_test = train_test_split(feature1, y1, test_size=0.3)
 
-	clf = svm.SVC(kernel='rbf',C=1000)
+	clf = svm.LinearSVC(C=100)
 	clf.fit(X_train,y_train)
 
 	pred=clf.predict(X_test)

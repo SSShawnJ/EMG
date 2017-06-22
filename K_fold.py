@@ -12,7 +12,7 @@ from sklearn.utils import shuffle
 import svm
 import matplotlib.pyplot as plt
 
-def K_fold(K=10,C=1000,SEGMENT_SIZE=30,thresh=1):
+def K_fold(K=10,C=0.1,SEGMENT_SIZE=30,thresh=1):
 	from numpy import genfromtxt
 	path1="Data/Positive_dataset_typing.csv"
 	path2="Data/Negative_dataset_noMoves.csv"
@@ -30,8 +30,8 @@ def K_fold(K=10,C=1000,SEGMENT_SIZE=30,thresh=1):
 
 	feature+=(feature2+feature3+feature4+feature5)
 	y+=(y2+y3+y4+y5)
+	# path="Extracted_features/S_"+str(SEGMENT_SIZE)+"_T_"+str(thresh)+".csv"
 
-	# print len(feature), len(y)
 
 	feature = np.array(feature)
 	y= np.array(y)
@@ -40,13 +40,10 @@ def K_fold(K=10,C=1000,SEGMENT_SIZE=30,thresh=1):
 	np.savetxt("Features_"+filename+".csv", feature, delimiter=",")
 	np.savetxt("Labels_"+filename+".csv", y, delimiter=",")
 
-	# print sum(y)
-
 	feature,y=shuffle(feature,y)
 	
 	# feature = genfromtxt('Features.csv', delimiter=',')
 	# y= genfromtxt('Labels.csv', delimiter=',')
-
 
 
 	kf = KFold(n_splits=K)
@@ -55,7 +52,7 @@ def K_fold(K=10,C=1000,SEGMENT_SIZE=30,thresh=1):
 	iteration=1
 	for train, test in kf.split(feature):
 
-		# print "iteration:", iteration
+		print "iteration:", iteration
 		X_train, X_test, y_train, y_test = feature[train], feature[test], y[train], y[test]
 
 		score+= (svm.train(X_train, y_train,  X_test, y_test,c=C))*1.0/K
@@ -67,15 +64,15 @@ def K_fold(K=10,C=1000,SEGMENT_SIZE=30,thresh=1):
 
 
 if __name__ == '__main__':
-	score=K_fold(K=10,C=1000,SEGMENT_SIZE=20,thresh=20)
+	score=K_fold(K=10,C=0.1,SEGMENT_SIZE=30,thresh=15)
 	print score
 
 	# t1 = []
 	# t2 = []
 	# xlabel=[]
 
-	# thresh=[1,5,10,20,30]
-	# SEGMENT_SIZE=[15,20,25,30,35]
+	# thresh=[1,5,10,20,30,35]
+	# SEGMENT_SIZE=[15,20,25,30,35,40]
 
 
 	# index=1
@@ -85,7 +82,7 @@ if __name__ == '__main__':
 	# 		l='T='+str(thr)+'\nS='+str(seg)
 	# 		print 'T='+str(thr)+', S='+str(seg)
 	# 		t1.append(index)
-	# 		t2.append(K_fold(K=10,C=1000,SEGMENT_SIZE=seg,thresh=thr))
+	# 		t2.append(K_fold(K=10,C=0.1,SEGMENT_SIZE=seg,thresh=thr))
 	# 		xlabel.append(l)
 	# 		index+=1
 

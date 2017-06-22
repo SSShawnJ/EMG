@@ -139,8 +139,8 @@ if __name__ == '__main__':
 
 	feature,y=shuffle(feature,y)
 
-	np.savetxt("Features.csv", feature, delimiter=",")
-	np.savetxt("Labels.csv", y, delimiter=",")
+	# np.savetxt("Features.csv", feature, delimiter=",")
+	# np.savetxt("Labels.csv", y, delimiter=",")
 
 
 	# X_train, X_test, y_train, y_test = train_test_split(feature1, y1, test_size=0.2, random_state=0)
